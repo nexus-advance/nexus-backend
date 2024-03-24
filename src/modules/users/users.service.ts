@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto, UpdateUserDto } from './dto'; 
 import { PasswordUserDto } from '../auth/dto/password-user.dto';
 import { PrismaService } from 'src/common/services';
-import { hos_usr_usuario } from '@prisma/client';
+import { nex_usr_usuario } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +19,7 @@ export class UsersService {
     private readonly prisma: PrismaService, 
   ) { }
 
-  async create(createUserDto: CreateUserDto, user: hos_usr_usuario) {
+  async create(createUserDto: CreateUserDto, user: nex_usr_usuario) {
     try {
       const { usr_password, ...resto } = createUserDto;
       var data: any = {
@@ -30,7 +30,7 @@ export class UsersService {
         usr_names: resto.usr_names,
         usr_surnames: resto.usr_surnames,
       };
-      const register = await this.prisma.hos_usr_usuario.create({
+      const register = await this.prisma.nex_usr_usuario.create({
         data,
       });
       delete register.usr_password;
@@ -42,10 +42,10 @@ export class UsersService {
 
   async updatePassword(
     passwordUserDto: PasswordUserDto,
-    user: hos_usr_usuario,
+    user: nex_usr_usuario,
   ) {
     try {
-      const respDb = await this.prisma.hos_usr_usuario.findFirst({
+      const respDb = await this.prisma.nex_usr_usuario.findFirst({
         where: { usr_code: user.usr_code },
       });
 
@@ -61,7 +61,7 @@ export class UsersService {
           'La nueva contraseña no debe ser la misma que la actual',
         );
 
-      await this.prisma.hos_usr_usuario.update({
+      await this.prisma.nex_usr_usuario.update({
         where: { usr_code: respDb.usr_code },
         data: {
           usr_password: bcrypt.hashSync(passwordUserDto.new_password, 10),
@@ -76,13 +76,13 @@ export class UsersService {
 
 
   findAll() {
-    return this.prisma.hos_usr_usuario.findMany({
+    return this.prisma.nex_usr_usuario.findMany({
       where: { usr_status: 'ACTIVE' },
     });
   }
 
   async findOne(term: string) {
-    let resp = await this.prisma.hos_usr_usuario.findFirst({
+    let resp = await this.prisma.nex_usr_usuario.findFirst({
       where: { usr_code: term, usr_status: 'ACTIVE' },
     });
     if (!resp)
@@ -93,7 +93,7 @@ export class UsersService {
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
-    user: hos_usr_usuario,
+    user: nex_usr_usuario,
   ) {
     await this.findOne(id);
     try {
@@ -105,7 +105,7 @@ export class UsersService {
         usr_names: resto.usr_names,
         usr_surnames: resto.usr_surnames,
       };
-      const product = await this.prisma.hos_usr_usuario.update({
+      const product = await this.prisma.nex_usr_usuario.update({
         where: { usr_code: id },
         data,
       });
@@ -119,7 +119,7 @@ export class UsersService {
 
   async remove(id: string) {
     const resp = await this.findOne(id);
-    await this.prisma.hos_usr_usuario.update({
+    await this.prisma.nex_usr_usuario.update({
       where: { usr_code: resp.usr_code },
       data: { usr_status: 'INACTIVE' },
     });

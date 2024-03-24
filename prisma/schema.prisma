@@ -10,142 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model hos_usr_usuario {
-  usr_code                   String                       @id(map: "hos_usr_pk") @default(uuid())
-  usr_code_employe           String
-  usr_names                  String
-  usr_surnames               String
-  usr_password               String
-  usr_attempts_faile         Int                          @default(0) @db.SmallInt
-  usr_status                 Estado                       @default(ACTIVE)
-  usr_date_create            DateTime                     @default(now())
-  usr_date_update            DateTime                     @default(now()) @db.Timestamptz()
-  usr_user_create            String
-  usr_usrer_update           String
-  hos_emp_employees          hos_emp_employees[]
-  hos_des_employee_discounts hos_des_employee_discounts[]
-  hos_pla_planillas          hos_pla_planillas[]
-}
-
-model hos_emp_employees {
-  emp_code                   String                       @id(map: "hos_emp_pk") @default(uuid())
-  emp_code_employee          String
-  emp_first_name             String
-  emp_second_name            String
-  emp_third_name             String?
-  emp_first_surname          String
-  emp_second_surname         String
-  emp_married_surname        String?
-  emp_codgen                 String
-  hos_gen_genders            hos_gen_genders              @relation(fields: [emp_codgen], references: [gen_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_emp_gen_fk")
-  emp_birth_date             DateTime?                    @db.Date()
-  emp_admission_date         DateTime?                    @db.Date()
-  emp_departure_date         DateTime?                    @db.Date()
-  emp_address                String?
-  emp_cel_phone              String?
-  emp_dui                    String?
-  emp_nit                    String?
-  emp_isss                   String?
-  emp_afp                    String?
-  emp_hourly_wage            Decimal?                     @default(0) @db.Decimal(10, 2)
-  emp_daily_wage             Decimal?                     @default(0) @db.Decimal(10, 2)
-  emp_base_salary            Decimal?                     @default(0) @db.Decimal(10, 2)
-  emp_viatic                 Decimal?                     @default(0) @db.Decimal(10, 2)
-  emp_complementary_diatic   Decimal?                     @default(0) @db.Decimal(10, 2)
-  emp_codlad                 String
-  hos_lad_labor_department   hos_lad_labor_department     @relation(fields: [emp_codlad], references: [lad_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_emp_lad_fk")
-  emp_codjti                 String
-  hos_jti_job_title          hos_jti_job_title            @relation(fields: [emp_codjti], references: [jti_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_emp_jti_fk")
-  emp_codwst                 String
-  hos_wst_work_status        hos_wst_work_status          @relation(fields: [emp_codwst], references: [wst_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_emp_wst_fk")
-  emp_codempboss             String?
-  hos_emp_employee_boss      hos_emp_employees?           @relation("hos_emp_employe", fields: [emp_codempboss], references: [emp_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_emp_cod_fk")
-  emp_codusr                 String
-  hos_usr_usuario            hos_usr_usuario              @relation(fields: [emp_codusr], references: [usr_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_emp_usr_fk")
-  emp_status                 Estado                       @default(ACTIVE)
-  emp_date_create            DateTime                     @default(now())
-  emp_date_update            DateTime                     @default(now()) @db.Timestamptz()
-  hos_des_employee_discounts hos_des_employee_discounts[]
-  hos_emp_employee           hos_emp_employees[]          @relation("hos_emp_employe")
-}
-
-model hos_des_employee_discounts {
-  des_code                      String                        @id(map: "hos_des_pk") @default(uuid())
-  des_coddin                    String
-  hos_din_discount_institutions hos_din_discount_institutions @relation(fields: [des_coddin], references: [din_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_des_din_fk")
-  des_reference                 String
-  emp_start_date                DateTime                      @default(now()) @db.Timestamptz()
-  emp_end_date                  DateTime                      @default(now()) @db.Timestamptz()
-  des_number_dues               Int                           @default(0)
-  des_amount                    Decimal?                      @default(0) @db.Decimal(10, 2)
-  des_codemp                    String
-  hos_emp_employees             hos_emp_employees             @relation(fields: [des_codemp], references: [emp_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_des_emp_fk")
-  des_codusr                    String
-  hos_usr_usuario               hos_usr_usuario               @relation(fields: [des_codusr], references: [usr_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_des_usr_fk")
-  des_status                    EstadoDescuento               @default(ACTIVE)
-}
-
-model hos_din_discount_institutions {
-  din_code                   String                       @id(map: "hos_din_pk") @default(uuid())
-  din_name                   String
-  din_status                 Estado                       @default(ACTIVE)
-  hos_des_employee_discounts hos_des_employee_discounts[]
+model nex_usr_usuario {
+  usr_code           String   @id(map: "nex_usr_pk") @default(uuid())
+  usr_code_employe   String
+  usr_names          String
+  usr_surnames       String
+  usr_password       String
+  usr_attempts_faile Int      @default(0) @db.SmallInt
+  usr_status         Estado   @default(ACTIVE)
+  usr_date_create    DateTime @default(now())
+  usr_date_update    DateTime @default(now()) @db.Timestamptz()
+  usr_user_create    String
+  usr_user_update    String
 }
 
 enum EstadoDescuento {
   ACTIVE
   CANCELED
-}
-
-model hos_gen_genders {
-  gen_code          String              @id(map: "hos_gen_pk") @default(uuid())
-  gen_name          String
-  gen_status        Estado              @default(ACTIVE)
-  hos_emp_employees hos_emp_employees[]
-}
-
-model hos_lad_labor_department {
-  lad_code          String              @id(map: "hos_lad_pk") @default(uuid())
-  lad_name          String
-  lad_status        Estado              @default(ACTIVE)
-  hos_emp_employees hos_emp_employees[]
-}
-
-model hos_jti_job_title {
-  jti_code          String              @id(map: "hos_jti_pk") @default(uuid())
-  jti_name          String
-  jti_status        Estado              @default(ACTIVE)
-  hos_emp_employees hos_emp_employees[]
-}
-
-model hos_wst_work_status {
-  wst_code          String              @id(map: "hos_wst_pk") @default(uuid())
-  wst_name          String
-  wst_status        Estado              @default(ACTIVE)
-  hos_emp_employees hos_emp_employees[]
-}
-
-model hos_pla_planillas {
-  pla_code             String                @id(map: "hos_pla_pk") @default(uuid())
-  pla_name             String?
-  pla_days_works       String?
-  pla_period           String? // este es el mes
-  pla_payment_type     String? // este es periodo de pago quincenal o mensual 
-  pla_date_start       DateTime?
-  pla_date_end         DateTime?
-  pla_date_create      DateTime?             @default(now())
-  pla_date_update      DateTime?             @default(now()) @db.Timestamptz()
-  pla_status           Estado                @default(ACTIVE)
-  hos_pmt_payment_type hos_pmt_payment_type? @relation(fields: [pla_payment_type], references: [pmt_code])
-  pla_codusr           String?
-  hos_usr_usuario      hos_usr_usuario?      @relation(fields: [pla_codusr], references: [usr_code], onDelete: NoAction, onUpdate: NoAction, map: "hos_pla_usr_fk")
-}
-
-model hos_pmt_payment_type {
-  pmt_code          String              @id() @default(uuid())
-  pmt_name          String
-  pmt_status        Estado              @default(ACTIVE)
-  hos_pla_planillas hos_pla_planillas[]
 }
 
 enum Estado {

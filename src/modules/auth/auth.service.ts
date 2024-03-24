@@ -5,7 +5,7 @@ import { PrismaService } from 'src/common/services';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces';
-import { hos_usr_usuario } from '@prisma/client';
+import { nex_usr_usuario } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,7 @@ export class AuthService {
   async login(createUserDto: CreateAuthDto): Promise<any> {
     const { password, user_code } = createUserDto;
 
-    const user = await this.prisma.hos_usr_usuario.findFirst({
+    const user = await this.prisma.nex_usr_usuario.findFirst({
       where: { usr_code_employe: user_code },
       select: {
         usr_code_employe: true,
@@ -37,13 +37,13 @@ export class AuthService {
       throw new UnauthorizedException('Usuario bloqueado, favor comunicarse con soporte técnico');
 
     if (!bcrypt.compareSync(password, user.usr_password)) {
-      await this.prisma.hos_usr_usuario.update({
+      await this.prisma.nex_usr_usuario.update({
         where: { usr_code: user.usr_code },
         data: { usr_attempts_faile: user.usr_attempts_faile + 1 },
       });
       throw new UnauthorizedException('Credenciales incorrectas');
     } else {
-      await this.prisma.hos_usr_usuario.update({
+      await this.prisma.nex_usr_usuario.update({
         where: { usr_code: user.usr_code },
         data: { usr_attempts_faile: 0 },
       });
@@ -56,9 +56,9 @@ export class AuthService {
 
     return data;
   } 
-  async checkStatus(user: hos_usr_usuario) {
+  async checkStatus(user: nex_usr_usuario) {
     try {
-      const userN = await this.prisma.hos_usr_usuario.findFirst({
+      const userN = await this.prisma.nex_usr_usuario.findFirst({
         where: { usr_code: user.usr_code },
         select: {
           usr_code_employe: true,
