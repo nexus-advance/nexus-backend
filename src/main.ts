@@ -9,7 +9,7 @@ import { AllExceptionFilter } from './common/filters';
 
 let PORT = 3000;
 let APP_URL = 'http://localhost';
-const logger = new Logger('HOSPITAL_PEDIATRICO');
+const logger = new Logger('NEXUS');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new AllExceptionFilter());
@@ -22,8 +22,8 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('HOSPITAL PEDIATRICO')
-    .setDescription('HOSPITAL PEDIATRICO APIs')
+    .setTitle('NEXUS ADVANCE')
+    .setDescription('NEXUS ADVANCE APIs')
     .setVersion('1.0')
     .addBearerAuth(
       {
