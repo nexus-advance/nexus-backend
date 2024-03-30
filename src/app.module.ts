@@ -4,13 +4,15 @@ import { UsersModule } from './modules/users/users.module';
 import { SeedModule } from './modules/seed/seed.module';
 
 import { AuthModule } from './modules/auth/auth.module'; 
+import { ClientsModule } from './modules/clients/clients.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UsersModule,
     SeedModule,
-    AuthModule, 
+    AuthModule,
+    ClientsModule, 
   ],
   controllers: [],
   providers: [],
