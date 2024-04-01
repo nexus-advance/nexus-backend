@@ -5,8 +5,8 @@ import { PrismaService } from 'src/common/services';
 
 @Injectable()
 export class ClientsService {
-  private readonly logger = new Logger('UsersService');
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger('ClientsService');
+  constructor(private readonly prisma: PrismaService) { }
   async create(createClientDto: CreateClientDto) {
     let {
       cli_birth_date,
@@ -48,13 +48,21 @@ export class ClientsService {
     });
   }
   async findAllCatalog() {
-    const [genders, departaments, education, marks, profession, relationship] =
+    const [genders, departaments, education, marks, profession, relationship, civilStatus] =
       await Promise.all([
         await this.prisma.nex_gen_gender.findMany({
           where: { gen_status: 'ACTIVE' },
         }),
         await this.prisma.nex_dep_departament.findMany({
           where: { dep_status: 'ACTIVE' },
+          include: {
+            nex_mun_municipalities: {
+              where: {
+                mun_status: 'ACTIVE'
+              },
+              include: { nex_dis_districts: { where: { dis_status: 'ACTIVE' } } }
+            }
+          }
         }),
         await this.prisma.nex_edl_education_level.findMany({
           where: { edl_status: 'ACTIVE' },
@@ -68,6 +76,9 @@ export class ClientsService {
         await this.prisma.nex_rel_relationship.findMany({
           where: { rel_status: 'ACTIVE' },
         }),
+        await this.prisma.nex_cis_civil_status.findMany({
+          where: { cis_status: 'ACTIVE' },
+        }),
       ]);
     return {
       genders,
@@ -76,6 +87,7 @@ export class ClientsService {
       marks,
       profession,
       relationship,
+      civilStatus,
     };
   }
 

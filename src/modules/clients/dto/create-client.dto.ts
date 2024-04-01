@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  IsUUID,
   Matches,
 } from 'class-validator';
 import { FORMAT_FECHA_YYYY_MM_DD } from 'src/common/const';
@@ -22,6 +23,7 @@ export class CreateClientDto {
 
   @ApiProperty({example:'UUID'})
   @IsString()
+  @IsUUID('all',{message:'Zona incorrecto'})
   @IsOptional()
   mar_code: string;
 
@@ -40,7 +42,13 @@ export class CreateClientDto {
   @Matches(FORMAT_FECHA_YYYY_MM_DD, {
     message: 'La fecha de expedicion es incorrecta debe ser  YYYY-mm-dd',
   })
-  cli_dui_date_expedition: string;
+  cli_dui_date_expedition: string; 
+
+  @ApiProperty({example:'UUID'})
+  @IsString()
+  @IsOptional()
+  @IsUUID('all',{message:'Estado civil incorrecto'})
+  cis_code: string;
 
   @ApiProperty({ example: '2024-01-31' })
   @IsString()
@@ -52,6 +60,7 @@ export class CreateClientDto {
 
   @ApiProperty({example:'UUID'})
   @IsString()
+  @IsUUID('all',{message:'Genero incorrecto'})
   @IsOptional()
   gen_code: string;
 
@@ -93,16 +102,19 @@ export class CreateClientDto {
   @ApiProperty({example:'UUID'})
   @IsString()
   @IsOptional()
+  @IsUUID()
   cli_dep_code_bussines: string;
 
   @ApiProperty({example:'UUID'})
   @IsString()
   @IsOptional()
+  @IsUUID('all',{message:'Municipio incorrecto'})
   cli_mun_code_bussines: string;
 
   @ApiProperty({example:'UUID'})
   @IsString()
   @IsOptional()
+  @IsUUID('all',{message:'Distrito incorrecto'})
   cli_dis_code_bussines: string;
 
   @ApiProperty({ example: 100 })
@@ -138,16 +150,19 @@ export class CreateClientDto {
   @ApiProperty({example:'UUID'})
   @IsString()
   @IsOptional()
+  @IsUUID('all',{message:'Departamento incorrecto'})
   cli_dep_code: string;
 
   @ApiProperty({example:'UUID'})
   @IsString()
   @IsOptional()
+  @IsUUID('all',{message:'Municipio incorrecto'})
   cli_mun_code: string;
 
   @ApiProperty({example:'UUID'})
   @IsString()
   @IsOptional()
+  @IsUUID('all',{message:'Disrito incorrecto'})
   cli_dis_code: string;
 
   @ApiProperty({ example: 10 })

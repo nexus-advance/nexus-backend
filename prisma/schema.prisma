@@ -31,6 +31,13 @@ model nex_gen_gender {
   nex_cli_clients nex_cli_clients[]
 }
 
+model nex_cis_civil_status {
+  cis_code        String            @id() @default(uuid())
+  cis_names       String
+  cis_status      Estado            @default(ACTIVE)
+  nex_cli_clients nex_cli_clients[]
+}
+
 model nex_prf_profession {
   prf_code   String @id() @default(uuid())
   prf_names  String
@@ -77,17 +84,19 @@ model nex_dis_districts {
 }
 
 model nex_cli_clients {
-  cli_code                    String               @id() @default(uuid())
+  cli_code                    String                @id() @default(uuid())
   cli_full_name               String?
-  cli_birth_date              DateTime?            @db.Date()
+  cli_birth_date              DateTime?             @db.Date()
   mar_code                    String?
-  nex_mar_markeds             nex_mar_markeds?     @relation(fields: [mar_code], references: [mar_code], onDelete: NoAction, onUpdate: NoAction)
+  nex_mar_markeds             nex_mar_markeds?      @relation(fields: [mar_code], references: [mar_code], onDelete: NoAction, onUpdate: NoAction)
+  cis_code                    String?
+  nex_cis_civil_status        nex_cis_civil_status? @relation(fields: [cis_code], references: [cis_code], onDelete: NoAction, onUpdate: NoAction)
   cli_dui                     String?
   cli_place_expedition        String?
-  cli_dui_date_expedition     DateTime?            @db.Date()
-  cli_dui_date_expiration     DateTime?            @db.Date()
+  cli_dui_date_expedition     DateTime?             @db.Date()
+  cli_dui_date_expiration     DateTime?             @db.Date()
   gen_code                    String?
-  nex_gen_gender              nex_gen_gender?      @relation(fields: [gen_code], references: [gen_code], onDelete: NoAction, onUpdate: NoAction)
+  nex_gen_gender              nex_gen_gender?       @relation(fields: [gen_code], references: [gen_code], onDelete: NoAction, onUpdate: NoAction)
   cli_is_taxpayer             Boolean?
   cli_no_taxpayer             String?
   cli_mount_month             Float?
@@ -98,7 +107,7 @@ model nex_cli_clients {
   cli_dep_code_bussines       String?
   cli_mun_code_bussines       String?
   cli_dis_code_bussines       String?
-  nex_dis_districts_bussinees nex_dis_districts?   @relation("bussiness", fields: [cli_dis_code_bussines], references: [dis_code], onDelete: NoAction, onUpdate: NoAction)
+  nex_dis_districts_bussinees nex_dis_districts?    @relation("bussiness", fields: [cli_dis_code_bussines], references: [dis_code], onDelete: NoAction, onUpdate: NoAction)
   cli_daily_sell              Float?
   cli_daily_buy               Float?
   cli_daily_gain              Float?
@@ -108,13 +117,13 @@ model nex_cli_clients {
   cli_dep_code                String?
   cli_mun_code                String?
   cli_dis_code                String?
-  nex_dis_districts_client    nex_dis_districts?   @relation("cliente", fields: [cli_dis_code], references: [dis_code], onDelete: NoAction, onUpdate: NoAction)
+  nex_dis_districts_client    nex_dis_districts?    @relation("cliente", fields: [cli_dis_code], references: [dis_code], onDelete: NoAction, onUpdate: NoAction)
   cli_time_alive              Int?
   cli_tenant_name             String?
   cli_tenant_phone            String?
-  cli_status                  Estado?              @default(ACTIVE)
-  cli_date_create             DateTime?            @default(now())
-  cli_date_update             DateTime?            @default(now()) @db.Timestamptz()
+  cli_status                  Estado?               @default(ACTIVE)
+  cli_date_create             DateTime?             @default(now())
+  cli_date_update             DateTime?             @default(now()) @db.Timestamptz()
   nex_ref_references          nex_ref_references[]
 }
 
