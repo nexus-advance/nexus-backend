@@ -2,6 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { PrismaService } from 'src/common/services';
+import { IsUUID } from 'class-validator';
 
 @Injectable()
 export class ClientsService {
@@ -22,11 +23,10 @@ export class ClientsService {
     cli_dui_date_expedition = new Date(cli_dui_date_expedition);
     cli_dui_date_expiration = new Date(cli_dui_date_expiration);
 
-    mar_code = mar_code.length > 0 ? mar_code : null;
-    gen_code = gen_code.length > 0 ? gen_code : null;
-    cli_dis_code_bussines =
-      cli_dis_code_bussines.length > 0 ? cli_dis_code_bussines : null;
-    cli_dis_code = cli_dis_code.length > 0 ? cli_dis_code : null;
+    mar_code = IsUUID(mar_code) ? mar_code : null;
+    gen_code = IsUUID(gen_code) ? gen_code : null;
+    cli_dis_code_bussines = IsUUID(cli_dis_code_bussines) ? cli_dis_code_bussines : null;
+    cli_dis_code = IsUUID(cli_dis_code) ? cli_dis_code : null;
     const respDB = await this.prisma.nex_cli_clients.create({
       data: {
         cli_birth_date,
@@ -45,6 +45,17 @@ export class ClientsService {
   async findAll() {
     return await this.prisma.nex_cli_clients.findMany({
       where: { cli_status: 'ACTIVE' },
+      include: {
+        nex_mar_markeds: true,
+        nex_cis_civil_status: true,
+        nex_gen_gender: true,
+        nex_dis_districts_bussinees: true,
+        nex_dis_districts_client: {
+          include: {
+            nex_mun_municipalities: { include: { nex_dep_departament: true } }
+          }
+        },
+      }
     });
   }
   async findAllCatalog() {

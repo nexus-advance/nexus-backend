@@ -32,7 +32,7 @@ export class ClientsController {
     return this.clientsService.findAll();
   }
 
-  @Get('get/catalog')
+  @Get('get/catalogs')
   findAllCatalog() {
     return this.clientsService.findAllCatalog();
   }
