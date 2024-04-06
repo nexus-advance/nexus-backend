@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
-  IsOptional,
-  IsPositive,
+  IsNumber,
+  IsOptional, 
   IsString,
   IsUUID,
   Matches,
@@ -21,9 +21,9 @@ export class CreateClientDto {
   @IsOptional()
   cli_birth_date: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
-  @IsUUID('all',{message:'Zona incorrecto'})
+  @IsUUID('all', { message: 'Zona incorrecto' })
   @IsOptional()
   mar_code: string;
 
@@ -35,6 +35,26 @@ export class CreateClientDto {
   @ApiProperty({})
   @IsString()
   @IsOptional()
+  cli_nit: string;
+
+  @ApiProperty({})
+  @IsString()
+  @IsOptional()
+  cli_children_number: string;
+
+  @ApiProperty({})
+  @IsString()
+  @IsOptional()
+  cli_spouse_name: string;
+
+  @ApiProperty({})
+  @IsString()
+  @IsOptional()
+  cli_email: string;
+
+  @ApiProperty({})
+  @IsString()
+  @IsOptional()
   cli_place_expedition: string;
 
   @ApiProperty({ example: '2024-01-31' })
@@ -42,13 +62,25 @@ export class CreateClientDto {
   @Matches(FORMAT_FECHA_YYYY_MM_DD, {
     message: 'La fecha de expedicion es incorrecta debe ser  YYYY-mm-dd',
   })
-  cli_dui_date_expedition: string; 
+  cli_dui_date_expedition: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
   @IsOptional()
-  @IsUUID('all',{message:'Estado civil incorrecto'})
+  @IsUUID('all', { message: 'Estado civil incorrecto' })
   cis_code: string;
+
+  @ApiProperty({ example: 'UUID' })
+  @IsString()
+  @IsOptional()
+  @IsUUID('all', { message: 'Nivel de educación incorrecto' })
+  edl_code: string;
+
+  @ApiProperty({ example: 'UUID' })
+  @IsString()
+  @IsOptional()
+  @IsUUID('all', { message: 'La profesión incorrecto' })
+  prf_code: string;
 
   @ApiProperty({ example: '2024-01-31' })
   @IsString()
@@ -58,9 +90,9 @@ export class CreateClientDto {
   })
   cli_dui_date_expiration: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
-  @IsUUID('all',{message:'Genero incorrecto'})
+  @IsUUID('all', { message: 'Genero incorrecto' })
   @IsOptional()
   gen_code: string;
 
@@ -75,7 +107,7 @@ export class CreateClientDto {
   cli_no_taxpayer: string;
 
   @ApiProperty({ example: 500 })
-  @IsPositive()
+  @IsNumber()
   @IsOptional()
   cli_mount_month: number;
 
@@ -90,7 +122,7 @@ export class CreateClientDto {
   cli_bussiness_tipe: string;
 
   @ApiProperty({ example: 4 })
-  @IsPositive()
+  @IsNumber()
   @IsOptional()
   cli_time_bussiness: number;
 
@@ -99,36 +131,36 @@ export class CreateClientDto {
   @IsOptional()
   cli_address_bussiness: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
   @IsOptional()
   @IsUUID()
   cli_dep_code_bussines: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
   @IsOptional()
-  @IsUUID('all',{message:'Municipio incorrecto'})
+  @IsUUID('all', { message: 'Municipio incorrecto' })
   cli_mun_code_bussines: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
   @IsOptional()
-  @IsUUID('all',{message:'Distrito incorrecto'})
+  @IsUUID('all', { message: 'Distrito incorrecto' })
   cli_dis_code_bussines: string;
 
   @ApiProperty({ example: 100 })
-  @IsPositive()
+  @IsNumber()
   @IsOptional()
   cli_daily_sell: number;
 
   @ApiProperty({ example: 100 })
-  @IsPositive()
+  @IsNumber()
   @IsOptional()
   cli_daily_buy: number;
 
   @ApiProperty({ example: 20 })
-  @IsPositive()
+  @IsNumber()
   @IsOptional()
   cli_daily_gain: number;
 
@@ -147,26 +179,26 @@ export class CreateClientDto {
   @IsOptional()
   cli_cell_phone: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
   @IsOptional()
-  @IsUUID('all',{message:'Departamento incorrecto'})
+  @IsUUID('all', { message: 'Departamento incorrecto' })
   cli_dep_code: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
   @IsOptional()
-  @IsUUID('all',{message:'Municipio incorrecto'})
+  @IsUUID('all', { message: 'Municipio incorrecto' })
   cli_mun_code: string;
 
-  @ApiProperty({example:'UUID'})
+  @ApiProperty({ example: 'UUID' })
   @IsString()
   @IsOptional()
-  @IsUUID('all',{message:'Disrito incorrecto'})
+  @IsUUID('all', { message: 'Disrito incorrecto' })
   cli_dis_code: string;
 
   @ApiProperty({ example: 10 })
-  @IsPositive()
+  @IsNumber()
   @IsOptional()
   cli_time_alive: number;
 

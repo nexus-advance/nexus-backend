@@ -12,30 +12,17 @@ export class ClientsService {
     let {
       cli_birth_date,
       cli_dui_date_expedition,
-      cli_dui_date_expiration,
-      mar_code,
-      gen_code,
-      cli_dis_code_bussines,
-      cli_dis_code,
+      cli_dui_date_expiration, 
       ...data
     }: any = createClientDto;
     cli_birth_date = new Date(cli_birth_date);
     cli_dui_date_expedition = new Date(cli_dui_date_expedition);
-    cli_dui_date_expiration = new Date(cli_dui_date_expiration);
-
-    mar_code = IsUUID(mar_code) ? mar_code : null;
-    gen_code = IsUUID(gen_code) ? gen_code : null;
-    cli_dis_code_bussines = IsUUID(cli_dis_code_bussines) ? cli_dis_code_bussines : null;
-    cli_dis_code = IsUUID(cli_dis_code) ? cli_dis_code : null;
+    cli_dui_date_expiration = new Date(cli_dui_date_expiration);  
     const respDB = await this.prisma.nex_cli_clients.create({
       data: {
-        cli_birth_date,
-        mar_code,
+        cli_birth_date, 
         cli_dui_date_expedition,
-        cli_dui_date_expiration,
-        gen_code,
-        cli_dis_code_bussines,
-        cli_dis_code,
+        cli_dui_date_expiration, 
         ...data,
       },
     });
@@ -114,39 +101,25 @@ export class ClientsService {
     let {
       cli_birth_date,
       cli_dui_date_expedition,
-      cli_dui_date_expiration,
-      mar_code,
-      gen_code,
-      cli_dis_code_bussines,
-      cli_dis_code,
+      cli_dui_date_expiration, 
       ...data
     }: any = updateClientDto;
     await this.findOne(cli_code);
     cli_birth_date = new Date(cli_birth_date);
     cli_dui_date_expedition = new Date(cli_dui_date_expedition);
     cli_dui_date_expiration = new Date(cli_dui_date_expiration);
-
-    mar_code = mar_code.length > 0 ? mar_code : null;
-    gen_code = gen_code.length > 0 ? gen_code : null;
-    cli_dis_code_bussines =
-      cli_dis_code_bussines.length > 0 ? cli_dis_code_bussines : null;
-    cli_dis_code = cli_dis_code.length > 0 ? cli_dis_code : null;
-    const respDB = await this.prisma.nex_cli_clients.update({
+ 
+    return await this.prisma.nex_cli_clients.update({
       where: {
         cli_code,
       },
       data: {
-        cli_birth_date,
-        mar_code,
+        cli_birth_date, 
         cli_dui_date_expedition,
-        cli_dui_date_expiration,
-        gen_code,
-        cli_dis_code_bussines,
-        cli_dis_code,
+        cli_dui_date_expiration, 
         ...data,
       },
-    });
-    return respDB;
+    }); 
   }
 
   async remove(cli_code: string) {
