@@ -14,6 +14,7 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Auth } from '../auth/decorators';
 import { HEADER_API_BEARER_AUTH } from 'src/common/const';
+import { CreateReferenceDto } from './dto/create-reference.dto';
 
 @ApiTags('Clients')
 @Controller('v1/clients')
@@ -26,6 +27,19 @@ export class ClientsController {
   create(@Body() createClientDto: CreateClientDto) {
     return this.clientsService.create(createClientDto);
   }
+
+
+  @Post("reference")
+  createRefence(@Body() createReferenceDto: CreateReferenceDto) {
+    return this.clientsService.createRefence(createReferenceDto);
+  }
+
+
+  @Get('reference/:id')
+  findReferences(@Param('id', ParseUUIDPipe) id: string) {
+    return this.clientsService.findReferences(id);
+  }
+
 
   @Get()
   findAll() {
@@ -53,5 +67,10 @@ export class ClientsController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.clientsService.remove(id);
+  }
+
+  @Delete('reference/:id')
+  removeReference(@Param('id', ParseUUIDPipe) id: string) {
+    return this.clientsService.removeReference(id);
   }
 }
