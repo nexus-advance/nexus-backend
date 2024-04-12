@@ -52,6 +52,13 @@ export class SeedService {
           { prf_names: 'Otro' },
         ]
       });
+      await this.prisma.nex_per_percentage.createMany({
+        data: [
+          { per_days: 20, per_rate:14 }, 
+          { per_days: 25, per_rate:15 }, 
+          { per_days: 20, per_rate:16 }, 
+        ]
+      });
 
       await this.prisma.nex_mar_markeds.createMany({
         data: [

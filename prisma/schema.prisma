@@ -59,6 +59,14 @@ model nex_dep_departament {
   nex_mun_municipalities nex_mun_municipalities[]
 }
 
+model nex_per_percentage {
+  per_code        String            @id() @default(uuid())
+  per_days        Int
+  per_rate        Int
+  per_status      Estado            @default(ACTIVE)
+  nex_cre_credits nex_cre_credits[]
+}
+
 model nex_mun_municipalities {
   mun_code            String               @id() @default(uuid())
   mun_names           String
@@ -135,6 +143,31 @@ model nex_cli_clients {
   cli_date_create             DateTime?                @default(now())
   cli_date_update             DateTime?                @default(now()) @db.Timestamptz()
   nex_ref_references          nex_ref_references[]
+  nex_cre_credits             nex_cre_credits[]
+}
+
+model nex_cre_credits {
+  cre_code           String              @id() @default(uuid())
+  cre_days           Int                 @default(0)
+  cre_daily_quota    Float               @default(0)
+  cre_neto_amount    Float               @default(0)
+  cre_tax_amount     Float               @default(0)
+  cre_brut_amount    Float               @default(0)
+  cre_date_start     DateTime?           @db.Date()
+  cre_date_finish    DateTime?           @db.Date()
+  cli_code           String
+  nex_cli_clients    nex_cli_clients?    @relation(fields: [cli_code], references: [cli_code], onDelete: NoAction, onUpdate: NoAction)
+  per_code           String
+  nex_per_percentage nex_per_percentage? @relation(fields: [per_code], references: [per_code], onDelete: NoAction, onUpdate: NoAction)
+  cre_status         EstadoCredit        @default(ACTIVE)
+  cre_date_create    DateTime?           @default(now())
+  cre_date_update    DateTime?           @default(now()) @db.Timestamptz()
+}
+
+enum EstadoCredit {
+  ACTIVE
+  PAYED
+  DELETED
 }
 
 model nex_rel_relationship {
