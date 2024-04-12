@@ -3,8 +3,10 @@ import { CreditsService } from './credits.service';
 import { CreateCreditDto } from './dto/create-credit.dto';
 import { UpdateCreditDto } from './dto/update-credit.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Auth } from '../auth/decorators';
+import { Auth, GetUser } from '../auth/decorators';
 import { HEADER_API_BEARER_AUTH } from 'src/common/const';
+import { nex_usr_usuario } from '@prisma/client';
+import { CreateAbonoDto } from './dto/create-abono.dto';
 
 @ApiTags('Creditos')
 @Controller('v1/credits')
@@ -14,8 +16,18 @@ export class CreditsController {
   constructor(private readonly creditsService: CreditsService) { }
 
   @Post()
-  create(@Body() createCreditDto: CreateCreditDto) {
-    return this.creditsService.create(createCreditDto);
+  create(
+    @Body() createCreditDto: CreateCreditDto,
+    @GetUser() user: nex_usr_usuario
+  ) {
+    return this.creditsService.create(createCreditDto,user);
+  }
+  @Post("generar-abono")
+  generarAbono(
+    @Body() createAbonoDto: CreateAbonoDto,
+    @GetUser() user: nex_usr_usuario
+  ) {
+    return this.creditsService.generarAbono(createAbonoDto,user);
   }
 
 

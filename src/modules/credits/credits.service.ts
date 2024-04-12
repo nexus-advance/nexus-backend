@@ -2,13 +2,15 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateCreditDto } from './dto/create-credit.dto';
 import { UpdateCreditDto } from './dto/update-credit.dto';
 import { PrismaService } from 'src/common/services';
+import { nex_usr_usuario } from '@prisma/client';
+import { CreateAbonoDto } from './dto/create-abono.dto';
 
 @Injectable()
 export class CreditsService {
   private readonly logger = new Logger('CreditsService');
   constructor(private readonly prisma: PrismaService) { }
 
-  async create(createCreditDto: CreateCreditDto) {
+  async create(createCreditDto: CreateCreditDto, user: nex_usr_usuario) {
 
     let {
       cre_date_start: cre_date_start1,
@@ -37,11 +39,12 @@ export class CreditsService {
         data: {
           ...data,
           cre_date_start,
-          cre_date_finish
+          cre_date_finish,
+          usr_code: user.usr_code
         }
       });
     } catch (error) {
-      this.logger.error(error );
+      this.logger.error(error);
       return 'Ha ocurrido un error al crear el credito';
     }
   }
@@ -53,8 +56,57 @@ export class CreditsService {
       }
     });
   }
-  findAll() {
-    return `This action returns all credits`;
+
+  async generarAbono(createAbonoDto: CreateAbonoDto, user: nex_usr_usuario) {
+    try {
+      const resp = await this.prisma.nex_abo_abonos.create({
+        data: {
+          usr_code: user.usr_code,
+          abo_cuota: createAbonoDto.amount,
+          cre_code: createAbonoDto.cre_code
+        }
+      });
+      const suma = await this.prisma.nex_abo_abonos.aggregate({
+        where: {
+          cre_code: createAbonoDto.cre_code
+        },
+        _sum: {
+          abo_cuota: true,
+        },
+      })
+      const credito = await this.prisma.nex_cre_credits.findFirst({
+        where: {
+          cre_code: createAbonoDto.cre_code
+        },
+      }) 
+      if ((credito.cre_brut_amount - suma._sum.abo_cuota) <= 0) { 
+        await this.prisma.nex_cre_credits.update({
+          where: {
+            cre_code: createAbonoDto.cre_code
+          },
+          data: {
+            cre_status: 'PAYED', 
+          }
+        })
+      }
+
+      return resp;
+    } catch (error) {
+      return 'No se pudo generar el abono intentar mas tarde';
+    }
+  }
+  async findAll() {
+    return await this.prisma.nex_cre_credits.findMany({
+      where: {
+        cre_status: 'ACTIVE'
+      },
+      include: {
+        nex_cli_clients: true,
+        nex_per_percentage: true,
+        nex_usr_usuario: true,
+        nex_abo_abonos: true,
+      }
+    });
   }
 
   findOne(id: number) {
