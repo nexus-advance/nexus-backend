@@ -7,6 +7,7 @@ import { Auth, GetUser } from '../auth/decorators';
 import { HEADER_API_BEARER_AUTH } from 'src/common/const';
 import { nex_usr_usuario } from '@prisma/client';
 import { CreateAbonoDto } from './dto/create-abono.dto';
+import { FilterAbonsoDto } from './dto/create-abono.dto copy';
 
 @ApiTags('Creditos')
 @Controller('v1/credits')
@@ -34,6 +35,14 @@ export class CreditsController {
   @Get("taxse")
   findTaxt() {
     return this.creditsService.findTaxt();
+  }
+
+
+  @Post("dues")
+  findDues(
+    @Body() filterAbonsoDto: FilterAbonsoDto,
+  ) {
+    return this.creditsService.findDues(filterAbonsoDto);
   }
 
   @Get()

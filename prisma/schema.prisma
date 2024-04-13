@@ -176,9 +176,9 @@ model nex_abo_abonos {
   nex_usr_usuario nex_usr_usuario? @relation(fields: [usr_code], references: [usr_code], onDelete: NoAction, onUpdate: NoAction)
   cre_code        String
   nex_cre_credits nex_cre_credits? @relation(fields: [cre_code], references: [cre_code], onDelete: NoAction, onUpdate: NoAction)
-  cre_status      Estado           @default(ACTIVE)
-  cre_date_create DateTime?        @default(now())
-  cre_date_update DateTime?        @default(now()) @db.Timestamptz()
+  abo_status      Estado           @default(ACTIVE)
+  abo_date_create DateTime?        @default(now())
+  abo_date_update DateTime?        @default(now()) @db.Timestamptz()
 }
 
 enum EstadoCredit {

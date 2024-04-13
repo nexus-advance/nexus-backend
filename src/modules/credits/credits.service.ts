@@ -4,6 +4,8 @@ import { UpdateCreditDto } from './dto/update-credit.dto';
 import { PrismaService } from 'src/common/services';
 import { nex_usr_usuario } from '@prisma/client';
 import { CreateAbonoDto } from './dto/create-abono.dto';
+import { FilterAbonsoDto } from './dto/create-abono.dto copy';
+import { TimeType, convert_date_yyyy_mm_dd } from 'src/common/helpers';
 
 @Injectable()
 export class CreditsService {
@@ -50,12 +52,46 @@ export class CreditsService {
   }
 
   async findTaxt() {
+
     return await this.prisma.nex_per_percentage.findMany({
       where: {
         per_status: 'ACTIVE'
       }
     });
   }
+  async findDues(filterAbonsoDto: FilterAbonsoDto) {
+    const startDate = convert_date_yyyy_mm_dd(filterAbonsoDto.date, TimeType.Inicio);
+    const endDate = convert_date_yyyy_mm_dd(filterAbonsoDto.date, TimeType.Fin);
+    const credits = await this.prisma.nex_cre_credits.aggregate({
+      where: {
+        cre_status: 'ACTIVE'
+      },
+      _sum: {
+        cre_daily_quota: true,
+      },
+    });
+    const cuotas = await this.prisma.nex_abo_abonos.findMany({
+      where: {
+        abo_status: 'ACTIVE',
+        abo_date_create: {
+          gte: startDate,  // Mayor o igual 
+          lte: endDate   // Menor o igual 
+        }
+      },
+      orderBy: {
+        abo_date_create: 'desc'
+      },
+      include: {
+        nex_cre_credits: {
+          include: {
+            nex_cli_clients: true
+          }
+        }
+      }
+    });
+    return { cuotas, credits: credits._sum.cre_daily_quota }
+  }
+
 
   async generarAbono(createAbonoDto: CreateAbonoDto, user: nex_usr_usuario) {
     try {
@@ -78,14 +114,14 @@ export class CreditsService {
         where: {
           cre_code: createAbonoDto.cre_code
         },
-      }) 
-      if ((credito.cre_brut_amount - suma._sum.abo_cuota) <= 0) { 
+      })
+      if ((credito.cre_brut_amount - suma._sum.abo_cuota) <= 0) {
         await this.prisma.nex_cre_credits.update({
           where: {
             cre_code: createAbonoDto.cre_code
           },
           data: {
-            cre_status: 'PAYED', 
+            cre_status: 'PAYED',
           }
         })
       }
