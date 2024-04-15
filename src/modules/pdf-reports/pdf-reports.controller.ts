@@ -11,12 +11,10 @@ import { HEADER_API_BEARER_AUTH } from 'src/common/const';
 export class PdfReportsController {
   constructor(private readonly pdfReportsService: PdfReportsService) {
 
-  }
-
+  } 
 
   @Get('generar-pagare/:id')
-  generarPagare(@Param('id') id: string) {
-    console.log("json====")
-    return this.pdfReportsService.generarPagare(id);
+  generarPagare(@Param('id') id: string) { 
+    return this.pdfReportsService.prepararPagare(id);
   }
 }
