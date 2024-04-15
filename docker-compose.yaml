@@ -31,7 +31,7 @@ services:
       TZ: 'America/El_Salvador'
       PGTZ: 'America/El_Salvador'
     networks:
-      - network-fac
+      - network-nexus
 
 networks:
   network-nexus: 
