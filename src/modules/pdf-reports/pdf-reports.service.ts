@@ -91,13 +91,13 @@ export class PdfReportsService {
       }
     }
     let cre_date_start = credit.cre_date_start.toISOString().split("T")[0];
-    let fecha_pre_documento = cre_date_start.split("-");
-    let mes = this.meses[Number(cre_date_start[2]) - 1].toLowerCase();
+    let fecha_pre_documento = cre_date_start.split("-"); 
+    let mes = this.meses[Number(fecha_pre_documento[1]) - 1].toLowerCase(); 
     let dia = '';
-    if (Number(cre_date_start[2]) > 1) {
-      dia = "a los " + NumeroALetras(Number(cre_date_start[2])).toLowerCase().replace(" dólares", "") + "dias";
+    if (Number(fecha_pre_documento[2]) > 1) {
+      dia = "a los " + NumeroALetras(Number(fecha_pre_documento[2])).toLowerCase().replace(" dólares", "") + "dias";
     } else {
-      dia = "al  primer dia";
+      dia = "al primer dia";
     }
     let fecha_documento = dia + " del mes de " + mes + " del año " + Miles(Number(fecha_pre_documento[0])).toLowerCase();
     let json = {
@@ -126,7 +126,7 @@ export class PdfReportsService {
     console.log(json)
     const tmpl = jsRender.templates(templateHtml);
     const content = tmpl.render(json);
-    const result = await this.jsreport.render({
+    const result = await this.jsreport.render({ 
       template: {
         content: content,
         engine: 'none',
