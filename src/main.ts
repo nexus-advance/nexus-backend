@@ -12,7 +12,7 @@ let APP_URL = 'http://localhost';
 const logger = new Logger('NEXUS');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new AllExceptionFilter());
+  // app.useGlobalFilters(new AllExceptionFilter()); 
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalPipes(
     new ValidationPipe({

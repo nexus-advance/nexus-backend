@@ -6,6 +6,7 @@ import { SeedModule } from './modules/seed/seed.module';
 import { AuthModule } from './modules/auth/auth.module'; 
 import { ClientsModule } from './modules/clients/clients.module';
 import { CreditsModule } from './modules/credits/credits.module';
+import { PdfReportsModule } from './modules/pdf-reports/pdf-reports.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { CreditsModule } from './modules/credits/credits.module';
     SeedModule,
     AuthModule,
     ClientsModule,
-    CreditsModule, 
+    CreditsModule,
+    PdfReportsModule, 
   ],
   controllers: [],
   providers: [],
